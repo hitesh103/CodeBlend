@@ -37,3 +37,17 @@ footer a{
   border-radius: 5px;
   outline: none;
 }
+
+.btn{
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.joinbtn{
+  background: rgb(167, 87, 243);
+  width: 100%;
+}
