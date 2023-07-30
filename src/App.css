@@ -1,5 +1,5 @@
 .homePageWrapper{
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,9 +45,63 @@ footer a{
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  font-weight: bold;
 }
 
-.joinbtn{
+.joinBtn, .leaveBtn{
   background: rgb(167, 87, 243);
   width: 100%;
+}
+
+.joinBtn:hover, .leaveBtn:hover{
+  background: purple;
+}
+
+.mainWrap {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+}
+
+.aside{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.asideInner{
+    flex: 1;
+}
+
+.clientList{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.client{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.userName{
+  margin-top: 10px;
+}
+
+.logo{
+  border-bottom: 1px solid purple;
+  padding-bottom: 10px;
+}
+
+.leaveBtn{
+  margin-top: 20px;
+}
+
+.CodeMirror {
+  min-height: calc(100vh-10px);
+  line-height: 1.6;
+  padding-top: 20px;
+  font-size: 20px;
 }
