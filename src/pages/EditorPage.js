@@ -16,6 +16,22 @@ const reactNavigator = useNavigate();
 
 const [clients,setClients] = useState([]);
 
+  // Define the event handler functions outside of useEffect
+  const handleJoined = ({ clients, username, socketId }) => {
+    if (username !== location.state.username) {
+      toast.success(`${username} joined the room.`);
+      console.log(`${username} joined`);
+    }
+    setClients(clients);
+  };
+
+  const handleDisconnected = ({ socketId, username }) => {
+    toast.success(`${username} left the room.`);
+    setClients((prev) => {
+      return prev.filter((client) => client.socketId !== socketId);
+    });
+  };
+
   useEffect(()=>{
     const init = async () => {
       socketRef.current = await initSocket();
@@ -57,10 +73,10 @@ const [clients,setClients] = useState([]);
 
     }
     init();
-    return () => {
+    if (socketRef.current) {
       socketRef.current.disconnect();
-      socketRef.current.off(ACTIONS.JOINED);
-      socketRef.current.off(ACTIONS.DISCONNECTED);
+      socketRef.current.off(ACTIONS.JOINED, handleJoined);
+      socketRef.current.off(ACTIONS.DISCONNECTED, handleDisconnected);
     }
   },[]);
 
@@ -88,7 +104,7 @@ if (!location.state) {
         <button className='btn leaveBtn'>Leave</button>
       </div>
       <div className='editorWrap'>
-        <Editor/>
+        <Editor socketRef={socketRef} roomId = {roomId}/>
       </div>
     </div>
   )
