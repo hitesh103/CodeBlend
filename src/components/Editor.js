@@ -20,9 +20,9 @@ const Editor = ({socketRef, roomId}) => {
       });
 
       editorRef.current.on('change',(instance,changes)=>{
+        console.log('changes',changes);
         const {origin} = changes;
         const code = instance.getValue();
-        // onCodeChange(code);
         if(origin !== 'setValue'){
           socketRef.current.emit(ACTIONS.CODE_CHANGE,{
             roomId,
@@ -47,10 +47,6 @@ const Editor = ({socketRef, roomId}) => {
               editorRef.current.setValue(code);
             }
           })
-        }
-
-        return () =>{
-          socketRef.current.off(ACTIONS.CODE_CHANGE);
         }
       },[socketRef.current]);
 
