@@ -90,6 +90,10 @@ const [clients,setClients] = useState([]);
       }
     }
 
+    function leaveRoom(){
+      reactNavigator('/');
+    }
+
 
 if (!location.state) {  
   return <Navigate to="/" />
@@ -110,7 +114,7 @@ if (!location.state) {
           </div>
         </div>
         <button className='btn copyBtn' onClick={() => copyRoomId(roomId.toString())}>Copy Room ID</button>
-        <button className='btn leaveBtn'>Leave</button>
+        <button className='btn leaveBtn' onClick={leaveRoom} >Leave</button>
       </div>
       <div className='editorWrap'>
         <Editor socketRef={socketRef} roomId = {roomId} />
