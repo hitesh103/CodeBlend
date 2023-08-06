@@ -80,6 +80,15 @@ const [clients,setClients] = useState([]);
     }
   },[]);
 
+  async function copyRoomId(roomId){
+      try {
+        await navigator.clipboard.writeText(roomId);
+        toast.success('Room Id is copied.');
+      } catch (err) {
+        toast.error('Not copied room Id.');
+        console.error(err);
+      }
+    }
 
 
 if (!location.state) {  
@@ -100,11 +109,11 @@ if (!location.state) {
             ))}
           </div>
         </div>
-        <button className='btn copyBtn'>Copy Room ID</button>
+        <button className='btn copyBtn' onClick={() => copyRoomId(roomId.toString())}>Copy Room ID</button>
         <button className='btn leaveBtn'>Leave</button>
       </div>
       <div className='editorWrap'>
-        <Editor socketRef={socketRef} roomId = {roomId}/>
+        <Editor socketRef={socketRef} roomId = {roomId} />
       </div>
     </div>
   )
