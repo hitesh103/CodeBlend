@@ -10,18 +10,15 @@ const io = new Server(server);
 const userSocketMap = {};
 
 function getAllConnectedClients(roomId){
-    //Map
-    const clients = io.sockets.adapter.rooms.get(roomId);
-    if (!clients) {
-        return [];
-    }
-
-    return Array.from(clients).map((socketId) => {
-        return {
-            socketId,
-            username: userSocketMap[socketId],
+    // Map
+    return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
+        (socketId) => {
+            return {
+                socketId,
+                username: userSocketMap[socketId],
+            };
         }
-    });
+    );
 }
 
 io.on('connection',(socket) =>{
@@ -39,7 +36,7 @@ io.on('connection',(socket) =>{
                 socketId: socket.id,
             })
         });
-    });
+    }); 
 
     socket.on(ACTIONS.CODE_CHANGE,({roomId,code}) => {
         socket.in(roomId).emit(ACTIONS.CODE_CHANGE, {code});
