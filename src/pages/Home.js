@@ -63,9 +63,9 @@ function Home() {
             Join
           </button>
           <span className="createInfo">
-            If you don't have invite create &nbsp;
+            If you don't have invite &nbsp;
             <a onClick={createNewRoom} href="" className="Create New">
-              Create Room
+            &#8618; Create Room 
             </a>
           </span>
         </div>
