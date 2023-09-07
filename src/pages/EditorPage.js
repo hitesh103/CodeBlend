@@ -21,14 +21,14 @@ function EditorPage() {
 
   const [clients, setClients] = useState([]);
 
-  // Define the event handler functions outside of useEffect
-  const handleJoined = ({ clients, username, socketId }) => {
-    if (username !== location.state.username) {
-      toast.success(`${username} joined the room.`);
-      console.log(`${username} joined`);
-    }
-    setClients(clients);
-  };
+  // // Define the event handler functions outside of useEffect
+  // const handleJoined = ({ clients, username, socketId }) => {
+  //   if (username !== location.state.username) {
+  //     toast.success(`${username} joined the room.`);
+  //     console.log(`${username} joined`);
+  //   }
+  //   setClients(clients);
+  // };
 
   const handleDisconnected = ({ socketId, username }) => {
     toast.success(`${username} left the room.`);
@@ -81,8 +81,8 @@ function EditorPage() {
     init();
     if (socketRef.current) {
       socketRef.current.disconnect();
-      socketRef.current.off(ACTIONS.JOINED, handleJoined);
-      socketRef.current.off(ACTIONS.DISCONNECTED, handleDisconnected);
+      socketRef.current.off(ACTIONS.JOINED);
+      socketRef.current.off(ACTIONS.DISCONNECTED);
     }
   }, []);
 
