@@ -12,6 +12,12 @@ import {
   useParams,
 } from "react-router-dom";
 
+function removeDuplicateClasses(classNames) {
+  const classesArray = classNames.split(" ");
+  const uniqueClasses = new Set(classesArray);
+  return Array.from(uniqueClasses).join(" ");
+}
+
 function EditorPage() {
   const socketRef = useRef(null);
   const codeRef = useRef(null);
@@ -39,6 +45,7 @@ function EditorPage() {
 
   useEffect(() => {
     const init = async () => {
+      console.debug("Entered init");
       socketRef.current = await initSocket();
       socketRef.current.on("connect_error", (err) => handleErrors(err));
       socketRef.current.on("connect_failed", (err) => handleErrors(err));
@@ -62,6 +69,19 @@ function EditorPage() {
             toast.success(`${username} joined the room.`);
             console.log(`${username} joined`);
           }
+
+          let uniqueUsernames = new Set();
+
+          // Use filter to remove duplicates in the existing array
+          clients = clients.filter(client => {
+              // If the username is not in the set, add it and keep the object
+              if (!uniqueUsernames.has(client.username)) {
+                  uniqueUsernames.add(client.username);
+                  return true;
+              }
+              return false;
+          });
+
           setClients(clients);
           socketRef.current.emit(ACTIONS.SYNC_CODE, {
             code: codeRef.current,
@@ -78,12 +98,27 @@ function EditorPage() {
         });
       });
     };
-    init();
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current.off(ACTIONS.JOINED);
-      socketRef.current.off(ACTIONS.DISCONNECTED);
+    function remElement(className) {
+      var elements = document.getElementsByClassName(className);
+      while (elements.length > 1) {
+        elements[0].parentNode.removeChild(elements[1]);
+      }
+    
+      var editorElement = document.querySelector(".cm-s-dracula");
+      if (editorElement) {
+        editorElement.style.height = "97.90vh";
+      }
     }
+    init();
+    remElement("cm-s-dracula");
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current.off(ACTIONS.JOINED);
+        socketRef.current.off(ACTIONS.DISCONNECTED);
+        socketRef.current.off(ACTIONS.CODE_CHANGE);
+      }
+    };
   }, []);
 
   async function copyRoomId(roomId) {
@@ -111,13 +146,6 @@ function EditorPage() {
           <div className="logo">
             <img className="logoImage" src={logo} alt="logo"></img>
           </div>
-          <h3>Connected</h3>
-          <div className="clientList">
-            {clients.map((client) => (
-              <Client key={client.socketId} username={client.username} />
-            ))}
-          </div>
-        </div>
         <button
           className="btn copyBtn"
           onClick={() => copyRoomId(roomId.toString())}
@@ -127,6 +155,13 @@ function EditorPage() {
         <button className="btn leaveBtn" onClick={leaveRoom}>
           Leave
         </button>
+          <h3>Connected</h3>
+          <div className="clientList">
+            {clients.map((client) => (
+              <Client key={client.socketId} username={client.username} />
+            ))}
+          </div>
+        </div>
       </div>
       <div className="editorWrap">
         <Editor
@@ -135,6 +170,7 @@ function EditorPage() {
           onCodeChange={(code) => {
             codeRef.current = code;
           }}
+          className={removeDuplicateClasses("CodeMirror cm-s-dracula cm-s-default")}
         />
       </div>
     </div>
@@ -142,3 +178,7 @@ function EditorPage() {
 }
 
 export default EditorPage;
+
+
+
+
