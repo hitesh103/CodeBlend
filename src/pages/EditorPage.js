@@ -182,7 +182,7 @@ function EditorPage() {
           </div>
         </div>
       </div>
-      <div className="editorWrap">
+      <div className="editorWrap" style={{ width: "100%" }}>
         <Editor
           socketRef={socketRef}
           roomId={roomId}
