@@ -14,7 +14,7 @@ import ACTIONS from '../actions';
  * @param {string} props.roomId - The ID of the room for real-time collaboration.
  * @param {Function} props.onCodeChange - A callback function to handle code changes.
  */
-const Editor = ({socketRef, roomId, onCodeChange, onUserChange}) => {
+const Editor = ({socketRef, roomId, onCodeChange}) => {
  const editorRef = useRef(null);
 
  /**
@@ -51,10 +51,8 @@ const Editor = ({socketRef, roomId, onCodeChange, onUserChange}) => {
    */
  useEffect(() => {
     if(socketRef.current){
-      socketRef.current.on(ACTIONS.CODE_CHANGE,({code,username})=>{
+      socketRef.current.on(ACTIONS.CODE_CHANGE,({code})=>{
         if(code !== null){
-          console.log(`${username} made a code change`);
-          onUserChange(username);
           editorRef.current.setValue(code);
         }
       })
