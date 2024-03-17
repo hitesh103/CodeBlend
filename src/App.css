@@ -59,8 +59,9 @@ footer a{
 }
 
 .mainWrap {
-  display: grid;
-  grid-template-columns: 230px 1fr;
+  /* display: grid;
+  grid-template-columns: 230px 1fr; */
+  display: flex;
 }
 
 .aside{
