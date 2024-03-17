@@ -18,6 +18,9 @@ function removeDuplicateClasses(classNames) {
   return Array.from(uniqueClasses).join(" ");
 }
 
+/**
+ * EditorPage component for the editor page
+ */
 function EditorPage() {
   const socketRef = useRef(null);
   const codeRef = useRef(null);
@@ -27,15 +30,10 @@ function EditorPage() {
 
   const [clients, setClients] = useState([]);
 
-  // // Define the event handler functions outside of useEffect
-  // const handleJoined = ({ clients, username, socketId }) => {
-  //   if (username !== location.state.username) {
-  //     toast.success(`${username} joined the room.`);
-  //     console.log(`${username} joined`);
-  //   }
-  //   setClients(clients);
-  // };
-
+  /**
+   * Event handler for when a user disconnects from the room
+   * @param {Object} param - The socketId and username of the disconnected user
+   */
   const handleDisconnected = ({ socketId, username }) => {
     toast.success(`${username} left the room.`);
     setClients((prev) => {
@@ -44,12 +42,19 @@ function EditorPage() {
   };
 
   useEffect(() => {
+    /**
+     * Initialize the socket connection and set up event listeners
+     */
     const init = async () => {
       console.debug("Entered init");
       socketRef.current = await initSocket();
       socketRef.current.on("connect_error", (err) => handleErrors(err));
       socketRef.current.on("connect_failed", (err) => handleErrors(err));
 
+      /**
+       * Handle socket connection errors
+       * @param {Error} e - The error object
+       */
       function handleErrors(e) {
         console.log("socket error", e);
         toast.error("Socket connection failed, try again later");
@@ -98,6 +103,11 @@ function EditorPage() {
         });
       });
     };
+
+    /**
+     * Remove duplicate elements with the given class name
+     * @param {string} className - The class name of the elements to remove duplicates from
+     */
     function remElement(className) {
       var elements = document.getElementsByClassName(className);
       while (elements.length > 1) {
@@ -109,8 +119,10 @@ function EditorPage() {
         editorElement.style.height = "97.90vh";
       }
     }
+
     init();
     remElement("cm-s-dracula");
+
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -121,6 +133,10 @@ function EditorPage() {
     };
   }, []);
 
+  /**
+   * Copy the room ID to the clipboard
+   * @param {string} roomId - The room ID to copy
+   */
   async function copyRoomId(roomId) {
     try {
       await navigator.clipboard.writeText(roomId);
@@ -131,6 +147,9 @@ function EditorPage() {
     }
   }
 
+  /**
+   * Leave the current room and navigate back to the home page
+   */
   function leaveRoom() {
     reactNavigator("/");
   }

@@ -7,9 +7,21 @@ import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import ACTIONS from '../actions';
 
-const Editor = ({socketRef, roomId,onCodeChange}) => {
-  const editorRef = useRef(null);
-  useEffect(() => {
+/**
+ * Editor component for real-time code editing with CodeMirror.
+ * @param {Object} props - The props object.
+ * @param {Object} props.socketRef - A reference to the WebSocket connection.
+ * @param {string} props.roomId - The ID of the room for real-time collaboration.
+ * @param {Function} props.onCodeChange - A callback function to handle code changes.
+ */
+const Editor = ({socketRef, roomId, onCodeChange}) => {
+ const editorRef = useRef(null);
+
+ /**
+   * Initializes the CodeMirror editor instance.
+   * Sets up event listeners for editor changes and server updates.
+   */
+ useEffect(() => {
     async function init() {
       editorRef.current = Codemirror.fromTextArea(document.getElementById('realtimeEditor'), {
         mode: { name: 'javascript', json: true },
@@ -20,7 +32,6 @@ const Editor = ({socketRef, roomId,onCodeChange}) => {
       });
 
       editorRef.current.on('change',(instance,changes)=>{
-        // console.log('changes',changes);
         const {origin} = changes;
         const code = instance.getValue();
         onCodeChange(code); 
@@ -33,26 +44,24 @@ const Editor = ({socketRef, roomId,onCodeChange}) => {
        })
     }
     init();
-  }, []); 
+ }, []); 
 
-      useEffect(()=>{
-        if(socketRef.current){
-          socketRef.current.on(ACTIONS.CODE_CHANGE,({code})=>{
-            if(code !== null){
-              editorRef.current.setValue(code);
-            }
-          })
+ /**
+   * Listens for code changes from the server and updates the editor accordingly.
+   */
+ useEffect(() => {
+    if(socketRef.current){
+      socketRef.current.on(ACTIONS.CODE_CHANGE,({code})=>{
+        if(code !== null){
+          editorRef.current.setValue(code);
         }
-        
-        // return () => {
-        //   socketRef.current.off(ACTIONS.CODE_CHANGE);
-        // }
+      })
+    }
+ },[socketRef.current]);
 
-      },[socketRef.current]);
-
-  return (
+ return (
     <textarea id='realtimeEditor'></textarea>
-  );
+ );
 };
 
 export default Editor;
