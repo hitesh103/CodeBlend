@@ -27,7 +27,7 @@
 
 ### To use CodeBlend:
 
-1. Go to `https://code-blend.netlify.app/`
+1. Go to `https://codeblend.onrender.com`
 2. Click "Create Room" to generate a unique room ID
 3. Share the room ID with others to allow them to connect
 4. Start coding! As you edit code, updates will appear for others live
