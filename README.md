@@ -1,107 +1,114 @@
-# CodeBlend: Real-Time Collaborative Code Editor
+# ██╗   ██╗███████╗ ██████╗ ███████╗    ███████╗ ██████╗  ██████╗ ████████╗
+# ██║   ██║██╔════╝██╔═══██╗██╔══██╗    ██╔════╝██╔═══██╗██╔═══██╗╚══██╔══╝
+# ██║   ██║█████╗  ██║   ██║██████╔╝    █████╗  ██║   ██║██║   ██║   ██║   
+# ██║   ██║██╔══╝  ██║   ██║██╔══██╗    ██╔══╝  ██║   ██║██║   ██║   ██║   
+# ╚██████╔╝███████╗╚██████╔╝██║  ██║    ███████╗╚██████╔╝╚██████╔╝   ██║   
+#  ╚════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝    ╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   
+#                                                                     
+#                    ███████╗███████╗ ███╗   ███╗ █████╗  ██████╗ ███████╗
+#                    ██╔════╝██╔════╝ ████╗ ████║██╔══██╗██╔════╝ ██╔════╝
+#                    █████╗  ███████╗ ██╔██╗ ██╔╝██║  ███╗╚██████╗ █████╗  
+#                    ██╔══╝  ╚════██║ ██║╚██╗██║██║   ██║ ╚═══██║ ██╔══╝  
+#                    ███████╗███████╗ ╚███╔███╔╝ ╚██████╔╝ ██████╗ ███████╗
+#                    ╚══════╝ ╚══════╝  ╚══╝══╩═╝  ╚═════╝  ╚═════╝ ╚══════╝
+#
 
-![CodeBlend Logo](https://lh3.googleusercontent.com/u/0/drive-viewer/AEYmBYSVYEUB6Eu_ic8-5YK2JKP9szIw-B6ZY6-m8i3preDyPqw6JKhnuMGq8FcDN_o5ZMu5yNDuSZWwa2BjB5UDmqq6WR4K=w1920-h937)
-
-## Why CodeBlend?
-
-- Boost Productivity and Innovation: Foster teamwork, knowledge sharing, and  • rapid problem-solving through real-time collaboration. 
-
-- Enhance Learning and Mentorship: Provide immediate feedback and guidance within the editor, accelerating learning and skill development.
-
-- Simplify Remote Collaboration: Work seamlessly with team members across the globe, bridging physical distances. 
-
-- Streamline Code Reviews and Interviews: Conduct efficient code reviews and live coding tests, saving time and resources.
-
-- Break Down Silos: Encourage cross-functional collaboration and knowledge sharing, fostering a more connected and innovative team.
-
-
-## Key Features : 
-
-- Real-Time Collaboration: See others' cursors and edits as they happen, ensuring seamless teamwork.
-
-- Instant Feedback: Provide immediate feedback and guidance within the editor, fostering learning and collaboration.
-- Shared Coding Sessions: Join or create coding rooms using unique IDs, making it easy to connect with others.
-- Language Support: Supports a wide range of programming languages, including (list the languages supported).
-- Interview Tool: Ideal for conducting live coding tests during interviews, assessing candidates' skills in real time.
-- File Saving (MongoDB): Create folders/files and save editor code to a MongoDB-backed file tree.
-## Getting Started :
-
-### To use CodeBlend:
-
-1. Go to `https://codeblend.onrender.com`
-2. Click "Create Room" to generate a unique room ID
-3. Share the room ID with others to allow them to connect
-4. Start coding! As you edit code, updates will appear for others live
-5. CodeBlend requires no registration and works directly in modern web browsers.
-## Usage Examples
-
-- Technical interviews - Interviewers can assess candidates by sharing a CodeBlend room and asking them to solve problems in real time
-- Pair programming - Team members can work together on code using two-way collaborative editing
-- Code reviews - Review code together and provide live feedback with other developers
-- Teaching and mentoring - Teachers can demonstrate concepts live while students follow along
-## Contributing
-
-Contributions are always welcome!
-
-### Installation
-
-#### To install CodeBlend for development:
-
-1. Fork the repo
-
-
-2. Clone your forked repo locally
+**CodeBlend** — A real-time collaborative code editor for teams, interviews, and pair programming.
 
 ```
-git clone https://github.com/Hitesh103/CodeBlend.git
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ██████╗  ██████╗  █████╗ ██████╗  █████╗ ██████╗  █████╗ ██████╗  │
+│ ██╔════╝ ██╔═══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗ │
+│ ██║     ██║   ██║███████║██║  ██║██║  ██║██║  ██║███████║██║  ██║ │
+│ ██║     ██║   ██║██╔══██║██║  ██║██║  ██║██║  ██║██╔══██║██║  ██║ │
+│ ╚██████╗╚██████╔╝██║  ██║██████╔╝╚██████╔╝██████╔╝██║  ██║██████╔╝ │
+│  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ │
+└────────────────────────────────────────────────────────────────��────────────┘
 ```
 
-3. Navigate to the project directory:
+## 🚀 Features
 
-```
-cd codeblend
-```
+- **Real-Time Collaboration** — See cursors, edits, and typing indicators live
+- **Room-Based Sessions** — Create/join rooms with shareable IDs
+- **File Explorer** — MongoDB-backed file tree with folders & files
+- **10+ Language Support** — JS, Python, HTML, CSS, Java, C++, Rust, Go, Markdown, Shell
+- **User Authentication** — Sign up/login with JWT tokens
+- **Platform Themes** — Dark, Light, Ocean, Forest, Sunset, Lavender
+- **Editor Themes** — Dracula, Monokai, Material Ocean, Neat, Elegant
+- **Code Persistence** — LocalStorage auto-save (24 hours)
+- **Mobile Responsive** — Works on desktop & mobile
+- **Keyboard Shortcuts** — Enter to open, Delete to remove, Cmd+N for new file
+- **Drag & Drop** — Move files/folders across directories
+- **Right-Click Menu** — VS Code style context menu
 
-4. Install dependencies:
+## 🛠️ Quick Start
 
-```
+```bash
+# Install dependencies
 npm install
+
+# Start frontend (port 3000)
+npm start
+
+# Start backend (port 5000) - new terminal
+npm run server:dev
 ```
 
-5. Start the development server:
+Open **http://localhost:3000**
 
-```
-npm run start
-```
+### MongoDB Setup (optional for file storage)
 
-6. Start the server:
-
-```
-npm run server:dev  # For development
-# or
-npm run server:prod  # For production
+```bash
+# Create .env.local with:
+MONGODB_URI=mongodb://localhost:27017/codeblend
 ```
 
-7. Open `http://localhost:3000` in your browser
+Restart the server.
 
-#### MongoDB (optional, for file saving)
+## 🎯 Usage
 
-1. Set `MONGODB_URI` (example in `.env.example`)
-2. Restart the backend (`npm run server:dev`)
+| Use Case | Description |
+|---------|------------|
+| **Technical Interviews** | Share room ID, watch candidate code in real-time |
+| **Pair Programming** | Collaborate with live cursor tracking |
+| **Code Reviews** | Instant feedback with multiple editors |
+| **Teaching/Mentoring** | Show code, students follow along |
 
+## 📁 Project Structure
 
-Now you can make code changes and test locally before making a pull request.
+```
+CodeBlend/
+├── server/
+│   ├── db.js           # MongoDB connection
+│   ├── models/        # User, FsNode schemas
+│   └── routes/       # Auth, FileSystem APIs
+├── src/
+│   ├── api/          # Frontend API calls
+│   ├── components/    # Editor, FileExplorer
+│   ├── context/     # Theme provider
+│   ├── hooks/       # Socket, persistence
+│   └── pages/       # Home, EditorPage
+└── build/          # Production build
+```
 
-Some ways to contribute:
+## 🤝 Contributing
 
-- Report bugs and issues
-- Suggest new features and improvements
-- Improve documentation
-- Add new language support
-- Help translate the app
-- Please follow code conventions and ensure any PRs don't introduce bugs.
-## License
+```bash
+# Fork & clone
+git clone https://github.com/Hitesh103/CodeBlend.git
+cd CodeBlend
 
-CodeBlend is [MIT LICENCED](https://choosealicense.com/licenses/mit/) 
+# Create branch
+git checkout -b feature/my-feature
 
-Happy Coding 💜 ...
+# Commit changes
+git add .
+git commit -m "feat: description"
+
+# Push & PR
+git push origin feature/my-feature
+```
+
+## 📜 License
+
+MIT — Happy Coding 💜
