@@ -1,114 +1,176 @@
-# ██╗   ██╗███████╗ ██████╗ ███████╗    ███████╗ ██████╗  ██████╗ ████████╗
-# ██║   ██║██╔════╝██╔═══██╗██╔══██╗    ██╔════╝██╔═══██╗██╔═══██╗╚══██╔══╝
-# ██║   ██║█████╗  ██║   ██║██████╔╝    █████╗  ██║   ██║██║   ██║   ██║   
-# ██║   ██║██╔══╝  ██║   ██║██╔══██╗    ██╔══╝  ██║   ██║██║   ██║   ██║   
-# ╚██████╔╝███████╗╚██████╔╝██║  ██║    ███████╗╚██████╔╝╚██████╔╝   ██║   
-#  ╚════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝    ╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   
-#                                                                     
-#                    ███████╗███████╗ ███╗   ███╗ █████╗  ██████╗ ███████╗
-#                    ██╔════╝██╔════╝ ████╗ ████║██╔══██╗██╔════╝ ██╔════╝
-#                    █████╗  ███████╗ ██╔██╗ ██╔╝██║  ███╗╚██████╗ █████╗  
-#                    ██╔══╝  ╚════██║ ██║╚██╗██║██║   ██║ ╚═══██║ ██╔══╝  
-#                    ███████╗███████╗ ╚███╔███╔╝ ╚██████╔╝ ██████╗ ███████╗
-#                    ╚══════╝ ╚══════╝  ╚══╝══╩═╝  ╚═════╝  ╚═════╝ ╚══════╝
-#
-
-**CodeBlend** — A real-time collaborative code editor for teams, interviews, and pair programming.
-
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  ██████╗  ██████╗  █████╗ ██████╗  █████╗ ██████╗  █████╗ ██████╗  │
-│ ██╔════╝ ██╔═══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗ │
-│ ██║     ██║   ██║███████║██║  ██║██║  ██║██║  ██║███████║██║  ██║ │
-│ ██║     ██║   ██║██╔══██║██║  ██║██║  ██║██║  ██║██╔══██║██║  ██║ │
-│ ╚██████╗╚██████╔╝██║  ██║██████╔╝╚██████╔╝██████╔╝██║  ██║██████╔╝ │
-│  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ │
-└────────────────────────────────────────────────────────────────��────────────┘
-```
+██████╗ ██████╗ ██████╗ ███████╗██████╗ ██╗     ███████╗███╗   ██╗██████╗ 
+██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔══██╗██║     ██╔════╝████╗  ██║██╔══██╗
+██║     ██║   ██║██║  ██║█████╗  ██████╔╝██║     █████╗  ██╔██╗ ██║██║  ██║
+██║     ██║   ██║██║  ██║██╔══╝  ██╔══██╗██║     ██╔══╝  ██║╚██╗██║██║  ██║
+╚██████╗╚██████╔╝██████╔╝███████╗██████╔╝███████╗███████╗██║ ╚████║██████╔╝
+ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ 
 
-## 🚀 Features
+--------------------------------------------------------------------------
 
-- **Real-Time Collaboration** — See cursors, edits, and typing indicators live
-- **Room-Based Sessions** — Create/join rooms with shareable IDs
-- **File Explorer** — MongoDB-backed file tree with folders & files
-- **10+ Language Support** — JS, Python, HTML, CSS, Java, C++, Rust, Go, Markdown, Shell
-- **User Authentication** — Sign up/login with JWT tokens
-- **Platform Themes** — Dark, Light, Ocean, Forest, Sunset, Lavender
-- **Editor Themes** — Dracula, Monokai, Material Ocean, Neat, Elegant
-- **Code Persistence** — LocalStorage auto-save (24 hours)
-- **Mobile Responsive** — Works on desktop & mobile
-- **Keyboard Shortcuts** — Enter to open, Delete to remove, Cmd+N for new file
-- **Drag & Drop** — Move files/folders across directories
-- **Right-Click Menu** — VS Code style context menu
+> initializing CodeBlend...
+> real-time collaborative coding environment ready
 
-## 🛠️ Quick Start
+--------------------------------------------------------------------------
 
-```bash
-# Install dependencies
+$ whoami
+CodeBlend
+
+$ description
+real-time collaborative code editor for interviews, pair programming,
+and live coding sessions
+
+--------------------------------------------------------------------------
+
+$ philosophy
+
+traditional_tools:
+  - slow
+  - bloated
+  - distracting
+
+codeblend:
+  - fast
+  - minimal
+  - collaboration-first
+
+--------------------------------------------------------------------------
+
+$ features --list
+
+[ real_time_engine ]
+  - live cursor tracking
+  - instant sync
+  - multi-user editing
+
+[ file_system ]
+  - mongodb-backed tree
+  - drag and drop
+  - folder/file hierarchy
+
+[ editor ]
+  - multi-language support
+  - theme system
+  - keyboard-first workflow
+
+[ collaboration ]
+  - room-based sessions
+  - shareable ids
+  - zero setup join
+
+[ experience ]
+  - auto-save (local)
+  - responsive ui
+  - vs-code-like interactions
+
+--------------------------------------------------------------------------
+
+$ architecture --visualize
+
+            +------------------+
+            |    frontend      |
+            |    (react)       |
+            +--------+---------+
+                     |
+                     | websocket
+                     |
+            +--------v---------+
+            |     backend      |
+            |     (node)       |
+            +--------+---------+
+                     |
+                     | rest api
+                     |
+            +--------v---------+
+            |     mongodb      |
+            |  file storage    |
+            +------------------+
+
+--------------------------------------------------------------------------
+
+$ install
+
 npm install
 
-# Start frontend (port 3000)
+$ run
+
 npm start
-
-# Start backend (port 5000) - new terminal
 npm run server:dev
-```
 
-Open **http://localhost:3000**
+$ open
 
-### MongoDB Setup (optional for file storage)
+http://localhost:3000
 
-```bash
-# Create .env.local with:
+--------------------------------------------------------------------------
+
+$ env
+
 MONGODB_URI=mongodb://localhost:27017/codeblend
-```
 
-Restart the server.
+--------------------------------------------------------------------------
 
-## 🎯 Usage
+$ use_cases
 
-| Use Case | Description |
-|---------|------------|
-| **Technical Interviews** | Share room ID, watch candidate code in real-time |
-| **Pair Programming** | Collaborate with live cursor tracking |
-| **Code Reviews** | Instant feedback with multiple editors |
-| **Teaching/Mentoring** | Show code, students follow along |
+interviewer:
+  share room -> observe candidate in real time
 
-## 📁 Project Structure
+developer:
+  pair program without screen sharing
 
-```
+mentor:
+  teach with live edits
+
+team:
+  collaborate instantly
+
+--------------------------------------------------------------------------
+
+$ project_structure
+
 CodeBlend/
 ├── server/
-│   ├── db.js           # MongoDB connection
-│   ├── models/        # User, FsNode schemas
-│   └── routes/       # Auth, FileSystem APIs
+│   ├── db.js
+│   ├── models/
+│   └── routes/
+│
 ├── src/
-│   ├── api/          # Frontend API calls
-│   ├── components/    # Editor, FileExplorer
-│   ├── context/     # Theme provider
-│   ├── hooks/       # Socket, persistence
-│   └── pages/       # Home, EditorPage
-└── build/          # Production build
-```
+│   ├── components/
+│   ├── hooks/
+│   ├── context/
+│   └── pages/
+│
+└── build/
 
-## 🤝 Contributing
+--------------------------------------------------------------------------
 
-```bash
-# Fork & clone
+$ roadmap
+
+- voice communication
+- code execution engine
+- ai-assisted coding
+- git integration
+- presence indicators
+
+--------------------------------------------------------------------------
+
+$ contribute
+
 git clone https://github.com/Hitesh103/CodeBlend.git
 cd CodeBlend
 
-# Create branch
-git checkout -b feature/my-feature
+git checkout -b feature/your-feature
+git commit -m "feat: add feature"
+git push origin feature/your-feature
 
-# Commit changes
-git add .
-git commit -m "feat: description"
+--------------------------------------------------------------------------
 
-# Push & PR
-git push origin feature/my-feature
+$ license
+
+MIT
+
+--------------------------------------------------------------------------
+
+$ exit
+
+CodeBlend shutting down...
 ```
-
-## 📜 License
-
-MIT — Happy Coding 💜
