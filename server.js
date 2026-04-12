@@ -13,6 +13,7 @@ const createAuthRouter = require('./server/routes/auth');
 
 const app = express();
 const server = http.createServer(app);
+
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000')
     .split(',')
     .map((o) => o.trim())
