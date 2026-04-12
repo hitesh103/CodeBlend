@@ -116,6 +116,24 @@ function EditorPage() {
         return () => clearInterval(interval);
     }, [activeFile?._id, saveToStorage]);
 
+    // Auto-save open file to database every 5 minutes
+    useEffect(() => {
+        if (!activeFile?._id || !codeRef.current) return;
+        const interval = setInterval(async () => {
+            if (codeRef.current) {
+                const code = codeRef.current;
+                try {
+                    await saveFile(activeFile._id, code);
+                    saveToStorage(code, activeFile._id);
+                    toast.success('Auto-saved');
+                } catch (err) {
+                    console.warn('Auto-save failed:', err);
+                }
+            }
+        }, 5 * 60 * 1000);
+        return () => clearInterval(interval);
+    }, [activeFile?._id, saveToStorage]);
+
     // Restore room code from localStorage on mount (no file open yet)
     useEffect(() => {
         const savedRoomCode = loadFromStorage(roomId);
