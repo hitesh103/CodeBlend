@@ -92,6 +92,17 @@
     color: #fff;
 }
 
+.toolbar-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.toolbar-btn:disabled:hover {
+    background: #1e2128;
+    border-color: #2a2d35;
+    color: #c9d1d9;
+}
+
 /* ── Editor body ── */
 .editor-body {
     flex: 1;

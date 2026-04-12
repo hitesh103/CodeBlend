@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Home from './Home';
 import { BrowserRouter } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -12,8 +13,6 @@ jest.mock('react-router-dom', () => ({
 jest.mock('react-hot-toast', () => ({
   __esModule: true,
   default: { success: jest.fn(), error: jest.fn() },
-  success: jest.fn(),
-  error: jest.fn(),
 }));
 
 const renderHome = () => render(
@@ -29,16 +28,16 @@ describe('Home', () => {
 
   it('shows inline error when roomId or username missing', () => {
     renderHome();
-    fireEvent.click(screen.getByRole('button', { name: /join room/i }));
-    expect(screen.getByText(/room id and username are required/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /join workspace/i }));
+    expect(toast.error).toHaveBeenCalled();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
   it('navigates when both fields are provided', () => {
     renderHome();
-    fireEvent.change(screen.getByPlaceholderText(/room id/i), { target: { value: 'abc' } });
-    fireEvent.change(screen.getByPlaceholderText(/how should others see you/i), { target: { value: 'me' } });
-    fireEvent.click(screen.getByRole('button', { name: /join room/i }));
-    expect(mockNavigate).toHaveBeenCalled();
+    fireEvent.change(screen.getByPlaceholderText(/paste invite room id/i), { target: { value: 'abc' } });
+    fireEvent.change(screen.getByPlaceholderText(/enter your username/i), { target: { value: 'me' } });
+    fireEvent.click(screen.getByRole('button', { name: /join workspace/i }));
+    expect(mockNavigate).toHaveBeenCalledWith('/editor/abc', { state: { username: 'me' } });
   });
 });

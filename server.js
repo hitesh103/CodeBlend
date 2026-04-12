@@ -1,14 +1,43 @@
+const dotenv = require('dotenv');
+dotenv.config();
+dotenv.config({ path: '.env.local' });
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
 const ACTIONS = require('./src/actions');
+const cors = require('cors');
+const { connectMongo } = require('./server/db');
+const createFsRouter = require('./server/routes/fs');
+const createAuthRouter = require('./server/routes/auth');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+const CORS_ORIGIN = ALLOWED_ORIGINS.length ? ALLOWED_ORIGINS : '*';
+
+app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
+app.use(express.json({ limit: '1mb' }));
+
+const io = new Server(server, {
+    cors: {
+        origin: CORS_ORIGIN,
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+});
 
 const userSocketMap = {};
+
+// Mongo-backed file storage API (optional, enabled when MONGODB_URI is set)
+connectMongo(process.env.MONGODB_URI).catch((err) => {
+    console.error('Mongo connection failed:', err.message);
+});
+app.use('/fs', createFsRouter());
+app.use('/auth', createAuthRouter());
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -68,4 +97,5 @@ app.get('*', (_req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+const HOST = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1');
+server.listen(PORT, HOST, () => console.log(`Listening on http://${HOST}:${PORT}`));

@@ -29,9 +29,8 @@
 .ep-logo {
     font-size: 12px;
     font-weight: 800;
-    color: #7c6af7;
-    letter-spacing: 0.05em;
-    background: #1e2128;
+    color: var(--cb-accent);
+    background: var(--cb-surface);
     border-radius: 6px;
     padding: 4px 8px;
 }
@@ -40,6 +39,15 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+.ep-theme-selector {
+    margin-left: auto;
+}
+
+.ep-theme-selector .theme-selector {
+    font-size: 11px;
+    padding: 4px 8px;
 }
 
 .ep-room-label {
@@ -64,6 +72,15 @@
     flex: 1;
     padding: 16px;
     overflow-y: auto;
+}
+
+.ep-sidebar-files {
+    flex: 1.2;
+    border-bottom: 1px solid #1e2128;
+}
+
+.ep-sidebar-connected {
+    flex: 1;
 }
 
 .ep-section-label {
@@ -135,8 +152,58 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .ep-sidebar {
-        width: 160px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .ep-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .ep-mobile-toggle {
+        display: flex;
+    }
+}
+
+.ep-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 101;
+    width: 40px;
+    height: 40px;
+    background: #1e2128;
+    border: 1px solid #2a2d35;
+    border-radius: 8px;
+    color: #c9d1d9;
+    font-size: 18px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ep-mobile-toggle:hover {
+    background: #2a2d35;
+    border-color: #7c6af7;
+}
+
+@media (max-width: 768px) {
+    .ep-mobile-toggle {
+        display: flex;
+    }
+
+    .ep-editor-wrap {
+        padding-top: 0;
     }
 }

@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Codemirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
+import 'codemirror/theme/material-ocean.css';
+import 'codemirror/theme/monokai.css';
+import 'codemirror/theme/neat.css';
+import 'codemirror/theme/elegant.css';
 
 // Language modes
 import 'codemirror/mode/javascript/javascript';
@@ -36,6 +40,15 @@ const LANGUAGES = [
     { label: 'Shell',      mode: 'shell',                            ext: 'sh' },
 ];
 
+const EDITOR_THEMES = [
+    { label: 'Dracula', value: 'dracula' },
+    { label: 'Monokai', value: 'monokai' },
+    { label: 'Material Ocean', value: 'material-ocean' },
+    { label: 'Neat', value: 'neat' },
+    { label: 'Elegant', value: 'elegant' },
+    { label: 'Default', value: 'default' },
+];
+
 // Assign a stable color per username
 const USER_COLORS = [
     '#7c6af7', '#f76a6a', '#6af7a0', '#f7c46a',
@@ -55,7 +68,30 @@ function getUserColor(username) {
  * Editor component — CodeMirror with real-time sync, language switching,
  * typing indicators, remote cursor markers, download, and copy-all.
  */
-const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
+function languageFromExt(ext) {
+    if (!ext) return null;
+    return LANGUAGES.find((l) => l.ext.toLowerCase() === ext.toLowerCase()) || null;
+}
+
+function extFromName(name) {
+    if (!name) return '';
+    const idx = name.lastIndexOf('.');
+    if (idx === -1) return '';
+    return name.slice(idx + 1);
+}
+
+const Editor = ({
+    socketRef,
+    roomId,
+    onCodeChange,
+    typingUsers = [],
+    activeFileName = null,
+    externalCode = null,
+    broadcastExternalCode = false,
+    onSave = null,
+    saveDisabled = false,
+    editorTheme = 'dracula',
+}) => {
     const editorRef = useRef(null);
     const cursorMarkers = useRef({});
     const typingTimer = useRef(null);
@@ -69,7 +105,7 @@ const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
     useEffect(() => {
         const editor = Codemirror.fromTextArea(document.getElementById('realtimeEditor'), {
             mode: language.mode,
-            theme: 'dracula',
+            theme: editorTheme || 'dracula',
             autoCloseTags: true,
             autoCloseBrackets: true,
             lineNumbers: true,
@@ -112,6 +148,36 @@ const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
             editor.toTextArea();
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // When a file is opened, switch language based on extension.
+    useEffect(() => {
+        const ext = extFromName(activeFileName);
+        const next = languageFromExt(ext);
+        if (next) setLanguage(next);
+        if (next && editorRef.current) editorRef.current.setOption('mode', next.mode);
+    }, [activeFileName]);
+
+    // Update editor theme when it changes
+    useEffect(() => {
+        if (editorRef.current && editorTheme) {
+            editorRef.current.setOption('theme', editorTheme);
+        }
+    }, [editorTheme]);
+
+    // Load external content into the editor and optionally broadcast to the room.
+    useEffect(() => {
+        if (externalCode === null || externalCode === undefined) return;
+        if (!editorRef.current) return;
+
+        isRemoteChange.current = true;
+        editorRef.current.setValue(String(externalCode));
+        editorRef.current.setCursor({ line: 0, ch: 0 });
+        isRemoteChange.current = false;
+
+        if (broadcastExternalCode) {
+            socketRef.current?.emit(ACTIONS.CODE_CHANGE, { roomId, code: String(externalCode) });
+        }
+    }, [externalCode, broadcastExternalCode, roomId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Listen for remote code changes
     useEffect(() => {
@@ -198,7 +264,7 @@ const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
             <div className="editor-toolbar">
                 <div className="toolbar-left">
                     <span className="file-dot"></span>
-                    <span className="file-name">main.{language.ext}</span>
+                    <span className="file-name">{activeFileName || `main.${language.ext}`}</span>
                     {typingUsers.length > 0 && (
                         <span className="typing-indicator">
                             {typingUsers.join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing…
@@ -206,6 +272,20 @@ const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
                     )}
                 </div>
                 <div className="toolbar-right">
+                    <select
+                        className="lang-select theme-select"
+                        value={editorTheme || 'dracula'}
+                        onChange={(e) => {
+                            if (editorRef.current) {
+                                editorRef.current.setOption('theme', e.target.value);
+                            }
+                        }}
+                        title="Editor theme"
+                    >
+                        {EDITOR_THEMES.map(t => (
+                            <option key={t.value} value={t.value}>{t.label}</option>
+                        ))}
+                    </select>
                     <select
                         className="lang-select"
                         value={language.label}
@@ -219,6 +299,16 @@ const Editor = ({ socketRef, roomId, onCodeChange, typingUsers = [] }) => {
                     <button className="toolbar-btn" onClick={handleCopyAll} title="Copy all code">
                         {copied ? '✓ Copied' : 'Copy'}
                     </button>
+                    {onSave && (
+                        <button
+                            className="toolbar-btn"
+                            onClick={onSave}
+                            disabled={saveDisabled}
+                            title={saveDisabled ? 'Select a file to save' : 'Save to database'}
+                        >
+                            Save
+                        </button>
+                    )}
                     <button className="toolbar-btn" onClick={handleDownload} title="Download file">
                         ↓ Download
                     </button>

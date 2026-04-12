@@ -23,6 +23,7 @@
 - Shared Coding Sessions: Join or create coding rooms using unique IDs, making it easy to connect with others.
 - Language Support: Supports a wide range of programming languages, including (list the languages supported).
 - Interview Tool: Ideal for conducting live coding tests during interviews, assessing candidates' skills in real time.
+- File Saving (MongoDB): Create folders/files and save editor code to a MongoDB-backed file tree.
 ## Getting Started :
 
 ### To use CodeBlend:
@@ -82,6 +83,11 @@ npm run server:prod  # For production
 ```
 
 7. Open `http://localhost:3000` in your browser
+
+#### MongoDB (optional, for file saving)
+
+1. Set `MONGODB_URI` (example in `.env.example`)
+2. Restart the backend (`npm run server:dev`)
 
 
 Now you can make code changes and test locally before making a pull request.

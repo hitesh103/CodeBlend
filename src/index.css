@@ -1,4 +1,63 @@
+:root {
+    --cb-bg: #0d0f14;
+    --cb-surface: #161920;
+    --cb-border: #1e2128;
+    --cb-text: #c9d1d9;
+    --cb-text-muted: #6e7681;
+    --cb-accent: #7c6af7;
+    --cb-accent-hover: #8b7bf8;
+}
+
 body {
     margin: 0;
     padding: 0;
+    background: var(--cb-bg);
+    color: var(--cb-text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input, button, select, textarea {
+    font-family: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cb-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cb-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--cb-text-muted);
+}
+
+.theme-selector {
+    background: var(--cb-surface);
+    color: var(--cb-text);
+    border: 1px solid var(--cb-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+}
+
+.theme-selector:hover {
+    border-color: var(--cb-accent);
+}
+
+.theme-selector:focus {
+    border-color: var(--cb-accent);
+    box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.2);
 }

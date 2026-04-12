@@ -1,140 +1,126 @@
-import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { login, register, getUser, isAuthenticated, clearAuth } from '../api/auth';
+import { ThemeSelector } from '../context/ThemeContext';
 import './Home.css';
 
-function Home() {
+function AuthPage() {
     const navigate = useNavigate();
-    const [roomId, setRoomId] = useState('');
-    const [username, setUsername] = useState('');
+    const [isLogin, setIsLogin] = useState(true);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const createNewRoom = (e) => {
-        e.preventDefault();
-        const id = uuidv4();
-        setRoomId(id);
-        toast.success('New room created — copy the ID and share it!');
-    };
-
-    const copyRoomId = async (e) => {
-        e.preventDefault();
-        if (!roomId) return;
-        try {
-            await navigator.clipboard.writeText(roomId);
-            toast.success('Room ID copied to clipboard!');
-        } catch {
-            toast.error('Could not copy — please copy manually.');
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate('/dashboard');
         }
-    };
+    }, [navigate]);
 
-    const handleInputEnter = (e) => {
-        if (e.code === 'Enter') joinRoom();
-    };
-
-    const joinRoom = () => {
-        if (!roomId || !username) {
-            toast.error('Room ID and username are required');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!email || !password) {
+            toast.error('Email and password are required');
             return;
         }
-        navigate(`/editor/${roomId}`, { state: { username } });
+        if (!isLogin && !name) {
+            toast.error('Name is required');
+            return;
+        }
+        setLoading(true);
+        try {
+            if (isLogin) {
+                await login(email, password);
+                toast.success('Welcome back!');
+            } else {
+                await register(name, email, password);
+                toast.success('Account created!');
+            }
+            navigate('/dashboard');
+        } catch (err) {
+            toast.error(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="home-root">
-            {/* Left sidebar */}
             <aside className="home-sidebar">
                 <div className="sidebar-logo">CB</div>
-                <nav className="sidebar-icons">
-                    <span className="sidebar-icon active" title="Workspace">⊞</span>
-                    <span className="sidebar-icon" title="Extensions">⊕</span>
-                    <span className="sidebar-icon" title="Collaboration">⊗</span>
-                    <span className="sidebar-icon" title="Plugins">⊘</span>
-                    <span className="sidebar-icon" title="Gallery">⊙</span>
-                </nav>
-                <div className="sidebar-bottom">
-                    <span className="sidebar-icon" title="Help">?</span>
-                    <span className="sidebar-icon" title="Settings">⚙</span>
-                </div>
             </aside>
 
             <main className="home-main">
-                {/* Top nav */}
                 <header className="home-topbar">
                     <span className="topbar-brand">CodeBlend</span>
-                    <nav className="topbar-nav">
-                        <span className="topbar-link active">Workspace</span>
-                        <span className="topbar-link">Logs</span>
-                        <span className="topbar-link">Settings</span>
-                    </nav>
                 </header>
 
                 <div className="home-center">
-                    <div className="home-card">
-                        <h1 className="card-headline">Logic Awaits.</h1>
-                        <p className="card-sub">Join a session or start a fresh collaborative workspace.</p>
+                    <div className="auth-card">
+                        <h1 className="auth-title">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
+                        <p className="auth-subtitle">
+                            {isLogin ? 'Sign in to access your workspace' : 'Sign up to start collaborating'}
+                        </p>
 
-                        {/* Step 1 — Room ID */}
-                        <div className="form-section">
-                            <label className="form-label">ROOM ID</label>
-                            <div className="input-row">
+                        <form className="auth-form" onSubmit={handleSubmit}>
+                            {!isLogin && (
+                                <div className="form-section">
+                                    <label className="form-label">NAME</label>
+                                    <input
+                                        className="form-input"
+                                        type="text"
+                                        placeholder="Your name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </div>
+                            )}
+
+                            <div className="form-section">
+                                <label className="form-label">EMAIL</label>
                                 <input
                                     className="form-input"
-                                    type="text"
-                                    placeholder="Paste invite room ID"
-                                    value={roomId}
-                                    onChange={(e) => setRoomId(e.target.value)}
-                                    onKeyUp={handleInputEnter}
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
-                                {roomId && (
-                                    <button
-                                        className="input-icon-btn"
-                                        onClick={copyRoomId}
-                                        title="Copy Room ID"
-                                    >
-                                        ⎘
-                                    </button>
-                                )}
                             </div>
-                        </div>
 
-                        {/* Step 2 — Username */}
-                        <div className="form-section">
-                            <label className="form-label">YOUR NAME</label>
-                            <div className="input-row">
+                            <div className="form-section">
+                                <label className="form-label">PASSWORD</label>
                                 <input
                                     className="form-input"
-                                    type="text"
-                                    placeholder="Enter your username"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    onKeyUp={handleInputEnter}
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-                        </div>
 
-                        {/* Join button */}
-                        <button className="init-btn" onClick={joinRoom}>
-                            Join Workspace
-                        </button>
+                            <button className="init-btn" type="submit" disabled={loading}>
+                                {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+                            </button>
+                        </form>
 
-                        {/* Create new room */}
-                        <div className="divider"><span>OR</span></div>
-
-                        <p className="create-info">
-                            Don't have an invite?{' '}
-                            <a href="/" className="create-link" onClick={createNewRoom}>
-                                ↗ Create new room
-                            </a>
+                        <p className="auth-switch">
+                            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                            <button
+                                className="auth-switch-btn"
+                                onClick={() => setIsLogin(!isLogin)}
+                            >
+                                {isLogin ? 'Sign Up' : 'Sign In'}
+                            </button>
                         </p>
                     </div>
                 </div>
 
-                {/* Decorative background code */}
                 <div className="bg-code-preview" aria-hidden="true">
                     <pre>{`import codeblend_sdk as cb
 from core import Architect
 
-# Initialize the workspace environment
 class ProjectController:
     def __init__(self, name):
         self.project_name = name
@@ -145,13 +131,106 @@ class ProjectController:
         return await cb.launch_node(
             region='us-east-monolith-1',
             tier='optimized-graphite'
-        )
-
-# Ready for collaboration`}</pre>
+        )`}</pre>
                 </div>
             </main>
         </div>
     );
 }
 
-export default Home;
+function Dashboard() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [roomId, setRoomId] = useState('');
+
+    useEffect(() => {
+        const currentUser = getUser();
+        if (!currentUser) {
+            navigate('/');
+            return;
+        }
+        setUser(currentUser);
+    }, [navigate]);
+
+    const handleLogout = () => {
+        clearAuth();
+        toast.success('Logged out');
+        navigate('/');
+    };
+
+    const createRoomId = () => {
+        if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+        return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    };
+
+    const createNewRoom = (e) => {
+        e.preventDefault();
+        const id = createRoomId();
+        navigate(`/editor/${id}`, { state: { username: user?.name } });
+    };
+
+    const joinRoom = () => {
+        if (!roomId) {
+            toast.error('Room ID required');
+            return;
+        }
+        navigate(`/editor/${roomId}`, { state: { username: user?.name } });
+    };
+
+    if (!user) return null;
+
+    return (
+        <div className="home-root">
+            <aside className="home-sidebar">
+                <div className="sidebar-logo">CB</div>
+            </aside>
+
+            <main className="home-main">
+                <header className="home-topbar">
+                    <span className="topbar-brand">CodeBlend</span>
+                    <div className="topbar-user">
+                        <ThemeSelector />
+                        <span className="user-name">{user.name}</span>
+                        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                    </div>
+                </header>
+
+                <div className="home-center">
+                    <div className="home-card">
+                        <h1 className="card-headline">Welcome, {user.name}</h1>
+                        <p className="card-sub">Join a session or start a fresh collaborative workspace.</p>
+
+                        <div className="form-section">
+                            <label className="form-label">ROOM ID</label>
+                            <div className="input-row">
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Paste invite room ID"
+                                    value={roomId}
+                                    onChange={(e) => setRoomId(e.target.value)}
+                                    onKeyUp={(e) => e.code === 'Enter' && joinRoom()}
+                                />
+                            </div>
+                        </div>
+
+                        <button className="init-btn" onClick={joinRoom}>
+                            Join Workspace
+                        </button>
+
+                        <div className="divider"><span>OR</span></div>
+
+                        <p className="create-info">
+                            Don't have an invite?{' '}
+                            <a href="/" className="create-link" onClick={createNewRoom}>
+                                ↗ Create new room
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    );
+}
+
+export { AuthPage, Dashboard };
