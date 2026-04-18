@@ -62,10 +62,11 @@ function EditorPage() {
 
     const copyRoomId = async () => {
         try {
-            await navigator.clipboard.writeText(roomId);
-            toast.success('Room ID copied.');
+            const inviteUrl = `${window.location.origin}/editor/${roomId}`;
+            await navigator.clipboard.writeText(inviteUrl);
+            toast.success('Invite link copied.');
         } catch {
-            toast.error('Could not copy room ID.');
+            toast.error('Could not copy invite link.');
         }
     };
 
@@ -190,7 +191,7 @@ function EditorPage() {
 
                 <div className="ep-sidebar-bottom">
                     <button className="ep-btn ep-copy-btn" onClick={copyRoomId}>
-                        Copy Room ID
+                        Copy Invite Link
                     </button>
                     <button className="ep-btn ep-leave-btn" onClick={leaveRoom}>
                         Leave Room
