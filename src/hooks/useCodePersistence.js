@@ -7,7 +7,7 @@ export function useCodePersistence(roomId, fileId) {
     const codeRef = useRef('');
     const lastSaveRef = useRef(0);
 
-    const getKey = (id) => STORAGE_KEY + (id || roomId);
+    const getKey = useCallback((id) => STORAGE_KEY + (id || roomId), [roomId]);
 
     const saveToStorage = useCallback((code, forFileId) => {
         if (!code && !forFileId) return;
@@ -22,7 +22,7 @@ export function useCodePersistence(roomId, fileId) {
         } catch (e) {
             console.warn('Failed to save to localStorage:', e);
         }
-    }, [roomId]);
+    }, [getKey]);
 
     const loadFromStorage = useCallback((forFileId) => {
         if (!forFileId && !roomId) return null;
@@ -41,7 +41,7 @@ export function useCodePersistence(roomId, fileId) {
         } catch (e) {
             return null;
         }
-    }, [roomId]);
+    }, [getKey, roomId]);
 
     const restore = useCallback((forFileId) => {
         const savedCode = loadFromStorage(forFileId);
@@ -55,7 +55,7 @@ export function useCodePersistence(roomId, fileId) {
     const clearStorage = useCallback((forFileId) => {
         const key = getKey(forFileId);
         window.localStorage.removeItem(key);
-    }, [roomId]);
+    }, [getKey]);
 
     const getLastSaved = useCallback(() => {
         return lastSaveRef.current;

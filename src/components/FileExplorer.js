@@ -67,7 +67,7 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
 
     const tree = useMemo(() => buildTree(nodes), [nodes]);
 
-    async function refresh() {
+    const refresh = useCallback(async () => {
         setLoading(true);
         try {
             const { nodes: list } = await listNodes();
@@ -78,11 +78,11 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
         } finally {
             setLoading(false);
         }
-    }
+    }, []);
 
     useEffect(() => {
         refresh();
-    }, []);
+    }, [refresh]);
 
     useEffect(() => {
         if (createMode && inputRef.current) {
@@ -129,6 +129,19 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
         });
     };
 
+    const handleDelete = useCallback(async (node, e) => {
+        e?.stopPropagation();
+        const ok = window.confirm(`Delete "${node.name}"?`);
+        if (!ok) return;
+        try {
+            await deleteNode(node._id);
+            toast.success('Deleted');
+            await refresh();
+        } catch (err) {
+            toast.error(err.message);
+        }
+    }, [refresh]);
+
     const handleKeyDown = useCallback((e, node) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -142,7 +155,7 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
             e.preventDefault();
             handleDelete(node);
         }
-    }, [onSelectFolder, onOpenFile]);
+    }, [onSelectFolder, onOpenFile, handleDelete]);
 
     const startCreate = (mode) => {
         setCreateMode(mode);
@@ -169,19 +182,6 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
             setCreateMode(null);
             setNewName('');
             if (activeParentId && activeParentId !== 'root') setExpanded(prev => new Set(prev).add(activeParentId));
-            await refresh();
-        } catch (err) {
-            toast.error(err.message);
-        }
-    };
-
-    const handleDelete = async (node, e) => {
-        e?.stopPropagation();
-        const ok = window.confirm(`Delete "${node.name}"?`);
-        if (!ok) return;
-        try {
-            await deleteNode(node._id);
-            toast.success('Deleted');
             await refresh();
         } catch (err) {
             toast.error(err.message);
@@ -282,7 +282,7 @@ export default function FileExplorer({ activeFileId, onOpenFile, selectedFolderI
     const renderNode = (node, depth = 0) => {
         const depthPadding = node.type === 'folder' ? depth * 12 + 8 : depth * 12 + 24;
         const isRenaming = renaming === node._id;
-        const isDragging = dragged === node._id;
+
         const isDropTarget = dropTarget === node._id;
 
         if (node.type === 'folder') {
